@@ -1,1 +1,5 @@
-d:\MicroPs\E155-Lab1\mcu\.gitignore
+# Segger Embedded Studio
+**/Output/
+**/Debug/
+*.emSession
+*.jlink
