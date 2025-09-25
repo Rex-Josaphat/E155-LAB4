@@ -14,16 +14,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Values for GPIO pins ("val" arguments)
-#define GPIO_LOW 0
+#define GPIO_LOW  0
 #define GPIO_HIGH 1
 
 // Base addresses for GPIO ports
-#define GPIOB_BASE (0x48000400UL)
+#define GPIOA_BASE (0x48000000UL)
 
 // Arbitrary GPIO functions for pinMode()
-#define GPIO_INPUT 0
+#define GPIO_INPUT  0
 #define GPIO_OUTPUT 1
-#define GPIO_ALT 2
+#define GPIO_ALT    2
 #define GPIO_ANALOG 3
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,12 +31,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // GPIO register structs here
-typedef struct
-{
+typedef struct {
     volatile uint32_t MODER;   // GPIO Offset 0x00 GPIO port mode register
     volatile uint32_t OTYPER;  // GPIO Offset 0x04
     volatile uint32_t OSPEEDR; // GPIO Offset 0x08
-    volatile uint32_t PURPDR;  // GPIO Offset 0x0C
+    volatile uint32_t PUPDR;  // GPIO Offset 0x0C
     volatile uint32_t IDR;     // GPIO Offset 0x10
     volatile uint32_t ODR;     // GPIO Offset 0x14
     volatile uint32_t BSRR;    // GPIO Offset 0x18
@@ -46,9 +45,7 @@ typedef struct
 } GPIO;
 
 // Pointers to GPIO-sized chunks of memory for each peripheral
-#define GPIOB ((GPIO *)GPIOB_BASE)
-
-#define GPIO GPIOB
+#define GPIOA ((GPIO *)GPIOA_BASE)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -61,5 +58,7 @@ int digitalRead(int pin);
 void digitalWrite(int pin, int val);
 
 void togglePin(int pin);
+
+void swPullUp(int pin, GPIO* GPIO); // Music switching function
 
 #endif
