@@ -52,7 +52,7 @@ const int Faded[][2] = {
 int main(void) {
 
     // Define Pins Used
-    int tunePin = 10; // PWM Output Pin
+    int tunePin = 9; // PWM Output Pin
     int song1Pin = 4; // Previous Song
     int song2Pin = 7; // Next Song
     
