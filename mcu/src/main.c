@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <lib/GPIO.h>
 #include <lib/RCC.h>
+#include <lib/TIM6_7.h>
 
 // Für Elise: Pitch in Hz, duration in ms
 const int Für_Elise[][2] = {
@@ -28,8 +29,17 @@ int main(void) {
     int tunePin = 10; // PWM Output Pin
     int song1Pin = 4; // Previous Song
     int song2Pin = 7; // Next Song
-
+    
+    // Configure ABP Prescale (Divide SYSCLK (4MHz) by 4 to 1MHz)
+    RCC->CFGR |=  (1 << 4);
+    RCC->CFGR &= ~(1 << 5);
+    RCC->CFGR &= ~(1 << 6);
+    RCC->CFGR |=  (1 << 7);
+    
     // Enable GPIO and Timers
+    RCC->AHB2ENR |= (1 << 0); // Enable GPIOA
+    timerEnable(RCC, 6); // Enable TIM6
+    timerEnable(RCC, 7); // Enable TIM7
     
     // Enable internal pull up for onboard switches
     swPullUp(song1Pin, GPIOA);
@@ -40,43 +50,29 @@ int main(void) {
     pinMode(song1Pin, GPIO_INPUT, GPIOA);
     pinMode(song2Pin, GPIO_INPUT, GPIOA);
 
-    // Enable Timer Counter
-    
-    // Configure ABP Prescale (Divide SYSCLK (4MHz) by 4 to 1MHz)
-    RCC->CFGR |=  (1 << 4);
-    RCC->CFGR &= ~(1 << 5);
-    RCC->CFGR &= ~(1 << 6);
-    RCC->CFGR |=  (1 << 7);
-    
-    // Set Timer 15 Prescale
-
-    // Set Timer 16 Prescale
+    // Set TIM Prescalers
+    setPrescaler(TIM6, 0b1111101000); // Divide input clock frequency to counter frequency of 1kHz
+    setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
 
     // Execute Logic
-
-    int tunes;
-
     while (1) {
 
         // Read Song Pins
-        // volatile int sw1 = digitalRead(); // Set to play Für Elise
-        // volatile int sw2 = digitalRead(); // Set to play Happy
+        volatile int sw1 = digitalRead(song1Pin, GPIOA); // Set to play Für Elise
+        volatile int sw2 = digitalRead(song2Pin, GPIOA); // Set to play Happy
 
         // Switching Logic
-        //     if (!sw1) {
-        //         tunes = sizeof(Für_Elise);
-        //         for (int i = 0; i < tunes; i++){
-        //             // Play song
-        //         }
-        //     }
+        if (!sw1) {
+            for (int i = 0; i < sizeof(Für_Elise); i++){
+                // Play song
+            }
+        }
 
-        //     if (!sw2) {
-        //         tunes = sizeof(Für_Elise);
-        //         for (int i = 0; i < tunes; i++){
-        //             // Play song
-        //         }
-        //     }
-        // }
+        if (!sw2) {
+            for (int i = 0; i < sizeof(Für_Elise); i++){
+                // Play song
+            }
+        }
     }
     return 0;
 }
