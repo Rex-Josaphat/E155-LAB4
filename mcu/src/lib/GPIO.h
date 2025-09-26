@@ -46,6 +46,7 @@ typedef struct {
 
 // Pointers to GPIO-sized chunks of memory for each peripheral
 #define GPIOA ((GPIO *)GPIOA_BASE)
+#define GPIO GPIOA
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -59,6 +60,6 @@ void digitalWrite(int pin, int val);
 
 void togglePin(int pin);
 
-void swPullUp(int pin, GPIO* GPIO); // Music switching function
+void swPullUp(int pin); // Music switching function
 
 #endif

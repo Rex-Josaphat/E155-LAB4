@@ -78,5 +78,6 @@ typedef struct
 
 void configurePLL(void);
 void configureClock(void);
+void timerEnable(RCC_TypeDef* RCC_in, int TIM);
 
 #endif

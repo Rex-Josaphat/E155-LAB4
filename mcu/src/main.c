@@ -4,13 +4,13 @@
 
 // Main file for running tones and frequencites. It also executes duration logic
 
-#include <stdint.h>
-#include <lib/GPIO.h>
 #include <lib/RCC.h>
 #include <lib/TIM6_7.h>
+#include <lib/GPIO.h>
+#include <stdint.h>
 
-// Für Elise: Pitch in Hz, duration in ms
-const int Für_Elise[][2] = {
+// Für Elise: Beethoven Pitch in Hz, duration in ms
+const int Fur_Elise[][2] = {
     {659,125}, {623,125}, {659,125} , {623,125}, {659,125}, {494,125}, {587,125}, {523,125}, {440,250}, {0,125}  ,
     {262,125}, {330,125}, {440,125} , {494,250}, {0,125}  , {330,125}, {416,125}, {494,125}, {523,250}, {0,125}  ,
     {330,125}, {659,125}, {623,125} , {659,125}, {623,125}, {659,125}, {494,125}, {587,125}, {523,125}, {440,250},
@@ -23,6 +23,32 @@ const int Für_Elise[][2] = {
     {623,125}, {659,125}, {623,125} , {659,125}, {494,125}, {587,125}, {523,125}, {440,250}, {0,125}  , {262,125},
     {330,125}, {440,125}, {494,250} , {0,125}  , {330,125}, {523,125}, {494,125}, {440,500}, {0,0}    };
 
+
+// Faded: Alan Walker Pitch in Hz, duration in ms
+const int Faded[][2] = {
+    {165,333}, {247,333}, {392,666}, {196,333}, {247,333}, {392,666}, {165,333}, {247,333}, {392,666}, {196,333},
+    {247,333}, {494,666}, {131,333}, {196,333}, {659,666}, {165,333}, {196,333}, {659,666}, {131,333}, {196,333},
+    {659,666}, {165,333}, {196,333}, {587,666}, {196,333}, {294,333}, {494,666}, {247,333}, {294,333}, {494,666},
+    {196,333}, {294,333}, {494,666}, {247,333}, {294,333}, {494,666}, {147,333}, {220,333}, {370,666}, {185,333},
+    {220,333}, {370,666}, {147,333}, {220,333}, {370,666}, {185,333}, {220,333}, {330,666}, {784,333}, {247,666},
+    {196,666}, {165,666}, {784,333}, {659,333}, {330,666}, {196,666}, {165,666}, {784,333}, {659,333}, {330,666},
+    {196,666}, {165,666}, {784,333}, {880,333}, {294,666}, {196,666}, {165,666}, {262,666}, {196,666}, {165,666},
+    {988,666}, {784,333}, {784,333}, {330,666}, {196,666}, {165,666}, {587,333}, {330,666}, {196,666}, {165,666},
+    {294,666}, {196,666}, {165,666}, {988,999}, {294,666}, {247,666}, {196,666}, {294,666}, {247,666}, {196,666},
+    {784,333}, {294,666}, {247,666}, {196,666}, {784,333}, {784,333}, {294,666}, {247,666}, {196,666}, {220,666},
+
+    {185,666}, {147,666}, {740,999}, {740,333}, {220,666}, {185,666}, {147,666}, {740,333}, {659,333}, {220,666},
+    {185,666}, {147,666}, {220,666}, {185,666}, {147,666}, {784,666}, {784,333}, {247,666}, {196,666}, {165,666},
+    {784,333}, {659,333}, {330,666}, {196,666}, {165,666}, {784,333}, {659,333}, {330,666}, {196,666}, {165,666},
+    {784,333}, {880,333}, {294,666}, {196,666}, {165,666}, {262,666}, {196,666}, {165,666}, {988,666}, {784,333},
+    {784,333}, {330,666}, {196,666}, {165,666}, {587,333}, {330,666}, {196,666}, {165,666}, {294,666}, {196,666},
+    {165,666}, {988,999}, {294,666}, {247,666}, {196,666}, {294,666}, {247,666}, {196,666}, {784,333}, {294,666},
+    {247,666}, {196,666}, {784,333}, {294,666}, {247,666}, {196,666}, {220,666}, {185,666}, {147,666}, {880,1499},
+    {220,666}, {185,666}, {147,666}, {988,333}, {494,333}, {220,666}, {185,666}, {147,666}, {988,333}, {494,333},
+    {988,333}, {494,333}, {220,666}, {185,666}, {147,666}, {82,333} , {196,166}, {165,166}, {988,666}, {784,666},
+    {494,666}, {784,333}, {196,166}, {165,166}, {784,333}, {196,166}, {165,166}, {988,333}, {196,166}, {0,0}    };
+
+
 int main(void) {
 
     // Define Pins Used
@@ -30,7 +56,7 @@ int main(void) {
     int song1Pin = 4; // Previous Song
     int song2Pin = 7; // Next Song
     
-    // Configure ABP Prescale (Divide SYSCLK (4MHz) by 4 to 1MHz)
+    // Configure AHB Prescale (Divide SYSCLK (4MHz) by 4 to 1MHz)
     RCC->CFGR |=  (1 << 4);
     RCC->CFGR &= ~(1 << 5);
     RCC->CFGR &= ~(1 << 6);
@@ -42,35 +68,43 @@ int main(void) {
     timerEnable(RCC, 7); // Enable TIM7
     
     // Enable internal pull up for onboard switches
-    swPullUp(song1Pin, GPIOA);
-    swPullUp(song2Pin, GPIOA);
+    swPullUp(song1Pin);
+    swPullUp(song2Pin);
     
     // Set Pin Modes
-    pinMode(tunePin, GPIO_OUTPUT, GPIOA);
-    pinMode(song1Pin, GPIO_INPUT, GPIOA);
-    pinMode(song2Pin, GPIO_INPUT, GPIOA);
+    pinMode(tunePin, GPIO_OUTPUT);
+    pinMode(song1Pin, GPIO_INPUT);
+    pinMode(song2Pin, GPIO_INPUT);
 
     // Set TIM Prescalers
-    setPrescaler(TIM6, 0b1111101000); // Divide input clock frequency to counter frequency of 1kHz
+    setPrescaler(TIM6, 1000); // Divide input clock frequency to counter frequency of 1kHz
     setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
 
     // Execute Logic
     while (1) {
 
         // Read Song Pins
-        volatile int sw1 = digitalRead(song1Pin, GPIOA); // Set to play Für Elise
-        volatile int sw2 = digitalRead(song2Pin, GPIOA); // Set to play Happy
+        volatile int sw1 = digitalRead(song1Pin); // Set to play Für Elise
+        volatile int sw2 = digitalRead(song2Pin); // Set to play Faded
 
         // Switching Logic
         if (!sw1) {
-            for (int i = 0; i < sizeof(Für_Elise); i++){
-                // Play song
+            int tunes = sizeof(Fur_Elise)/sizeof(Fur_Elise[0]);
+            for (int i = 0; i < tunes; i++){
+                int freq = Fur_Elise[i][0];
+                int dur = Fur_Elise[i][1];
+
+                genPWM(freq, dur, tunePin, TIM6, TIM7); // Play song
             }
         }
 
         if (!sw2) {
-            for (int i = 0; i < sizeof(Für_Elise); i++){
-                // Play song
+            int tunes = sizeof(Faded)/sizeof(Faded[0]);
+            for (int i = 0; i < tunes; i++){
+                int freq = Faded[i][0];
+                int dur = Faded[i][1];
+
+                genPWM(freq, dur, tunePin, TIM6, TIM7); // Play song
             }
         }
     }

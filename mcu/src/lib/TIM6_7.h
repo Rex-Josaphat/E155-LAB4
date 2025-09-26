@@ -46,11 +46,11 @@ typedef struct {
 void counterON(TIM6_7* TIM);
 void setDelay(TIM6_7* TIM, int ms);
 void resetFlag(TIM6_7* TIM);
-void resetCount(TIM6_7* TIM);
+void resetTIM(TIM6_7* TIM);
 void setPrescaler(TIM6_7* TIM, uint32_t val);
 void setArr(TIM6_7* TIM, uint32_t val);
 
 // Top function: TIMdelay picks TIM6 used for delay and TIMwave picks TIM7 used to generate square wave
-void genPWM(uint32_t freq, uint32_t dur, int pin, GPIO* GPIO, TIM6_7* TIMdelay, TIM6_7* TIMwave);
+void genPWM(uint32_t freq, uint32_t dur, int pin, TIM6_7* TIMdelay, TIM6_7* TIMwave);
 
 #endif

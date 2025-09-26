@@ -6,7 +6,7 @@
 
 #include "GPIO.h"
 
-void pinMode(int pin, int function, GPIO* GPIO) {
+void pinMode(int pin, int function) {
     switch (function) {
     case GPIO_INPUT:
         GPIO->MODER &= ~(0b11 << 2 * pin);
@@ -25,20 +25,24 @@ void pinMode(int pin, int function, GPIO* GPIO) {
     }
 }
 
-int digitalRead(int pin, GPIO* GPIO) {
+int digitalRead(int pin) {
     return ((GPIO->IDR) >> pin) & 1;
 }
 
-void digitalWrite(int pin, int val, GPIO* GPIO) {
-    GPIO->ODR |= (1 << pin);
+void digitalWrite(int pin, int val) {
+    if (val) {
+        GPIO->ODR |= (1 << pin); // Turn ON pin
+    } else {
+        GPIO->ODR &= ~(1 << pin); // Turn OFF pin
+    }
 }
 
-void togglePin(int pin, GPIO* GPIO) {
+void togglePin(int pin) {
     // Use XOR to toggle
     GPIO->ODR ^= (1 << pin);
 }
 
-void swPullUp(int pin, GPIO* GPIO) {
+void swPullUp(int pin) {
     GPIO->PUPDR &= ~(0x3 << (2 * pin)); // Clear the 2 bits for this pin
     GPIO->PUPDR |=  (0x1 << (2 * pin)); // Set Pin to 01 (pull-up)
 }
