@@ -4,9 +4,9 @@
 
 // Main file for running tones and frequencites. It also executes duration logic
 
-#include <lib/RCC.h>
-#include <lib/TIM6_7.h>
-#include <lib/GPIO.h>
+#include "lib/RCC.h"
+#include "lib/TIM6_7.h"
+#include "lib/GPIO.h"
 #include <stdint.h>
 
 // Für Elise: Beethoven Pitch in Hz, duration in ms

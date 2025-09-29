@@ -1,6 +1,7 @@
 {
-    "files.associations": {
-        "flash.h": "c",
-        "stdint.h": "c"
-    }
+  "files.associations": {
+    "flash.h": "c",
+    "stdint.h": "c",
+    "tim6_7.h": "c"
+  }
 }

@@ -4,8 +4,8 @@
 
 // Header for RCC Functions 
 
-#ifndef STM32L4_RCC_H
-#define STM32L4_RCC_H
+#ifndef RCC_H
+#define RCC_H
 
 #include <stdint.h>
 

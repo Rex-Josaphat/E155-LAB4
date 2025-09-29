@@ -3,6 +3,7 @@
 // 9/25/2025
 
 #include "TIM6_7.h"
+#include "GPIO.h"
 #include <stdint.h>
 
 // Enable counter on TIM
@@ -39,7 +40,7 @@ void setDelay(TIM6_7* TIM, int ms) {
     while (!(TIM->SR)) {} // Wait for counter overflow
 }
 
-void genPWM(uint32_t freq, int dur, int pin, TIM6_7* TIMdelay, TIM6_7* TIMwave) {
+void genPWM(uint32_t freq, uint32_t dur, int pin, TIM6_7* TIMdelay, TIM6_7* TIMwave) {
     if (dur <= 0) return;
     
     if (freq == 0) { // Base case

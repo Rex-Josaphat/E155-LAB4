@@ -4,11 +4,10 @@
 
 // Header file for basic timers 6 and 7
 
-#ifndef STM32L4_TIM6_7_H
-#define STM32L4_TIM6_7_H
+#ifndef TIM6_7_H
+#define TIM6_7_H
 
 #include <stdint.h>
-#include "GPIO.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -44,7 +43,7 @@ typedef struct {
 // Function prototypes
 ///////////////////////////////////////////////////////////////////////////////
 void counterON(TIM6_7* TIM);
-void setDelay(TIM6_7* TIM, int ms);
+void setDelay(TIM6_7* TIM, uint32_t ms);
 void resetFlag(TIM6_7* TIM);
 void resetTIM(TIM6_7* TIM);
 void setPrescaler(TIM6_7* TIM, uint32_t val);

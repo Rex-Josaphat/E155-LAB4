@@ -4,8 +4,8 @@
 
 // Header for GPIO functions
 
-#ifndef STM32L4_GPIO_H
-#define STM32L4_GPIO_H
+#ifndef GPIO_H
+#define GPIO_H
 
 #include <stdint.h> // Include stdint header
 
