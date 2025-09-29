@@ -4,9 +4,9 @@
 
 // Main file for running tones and frequencites. It also executes duration logic
 
-#include "lib/RCC.h"
-#include "lib/TIM6_7.h"
-#include "lib/GPIO.h"
+#include "D:\MicroPs\E155-Lab4\mcu\src\lib\RCC.h"
+#include "D:\MicroPs\E155-Lab4\mcu\src\lib\TIM6_7.h"
+#include "D:\MicroPs\E155-Lab4\mcu\src\lib\GPIO.h"
 #include <stdint.h>
 
 // Für Elise: Beethoven Pitch in Hz, duration in ms
@@ -52,28 +52,31 @@ const int Faded[][2] = {
 int main(void) {
 
     // Define Pins Used
-    int tunePin = 6; // PWM Output Pin
-    int song1Pin = 7; // Previous Song
-    int song2Pin = 4; // Next Song
+    int tunePin = 9; // PWM Output Pin
+    int song1Pin = 4; // Previous Song
+    int song2Pin = 7; // Next Song
     
     // Configure AHB Prescale (Divide SYSCLK (4MHz) by 4 to 1MHz)
-    RCC->CFGR |=  (0b1001 << 4);
+    RCC->CFGR |=  (1 << 4);
+    RCC->CFGR &= ~(1 << 5);
+    RCC->CFGR &= ~(1 << 6);
+    RCC->CFGR |=  (1 << 7);
     
     // Enable GPIO and Timers
     RCC->AHB2ENR |= (1 << 0); // Enable GPIOA
-    RCC->APB1ENR1 |= (1 << 4); // Enable TIM6
-    RCC->APB1ENR1 |= (1 << 5); // Enable TIM7
-
+    timerEnable(RCC, 6); // Enable TIM6
+    timerEnable(RCC, 7); // Enable TIM7
+    
     // Enable internal pull up for onboard switches
     swPullUp(song1Pin);
     swPullUp(song2Pin);
-
+    
     // Set Pin Modes
     pinMode(tunePin, GPIO_OUTPUT);
     pinMode(song1Pin, GPIO_INPUT);
     pinMode(song2Pin, GPIO_INPUT);
 
-    // Set Prescalers
+    // Set TIM Prescalers
     setPrescaler(TIM6, 1000); // Divide input clock frequency to counter frequency of 1kHz
     setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
 
@@ -88,8 +91,8 @@ int main(void) {
         if (!sw1) {
             int tunes = sizeof(Fur_Elise);
             for (int i = 0; i < tunes; i++){
-                uint32_t freq = Fur_Elise[i][0];
-                uint32_t dur = Fur_Elise[i][1];
+                int freq = Fur_Elise[i][0];
+                int dur = Fur_Elise[i][1];
 
                 genPWM(freq, dur, tunePin, TIM6, TIM7); // Play song
             }
@@ -98,8 +101,8 @@ int main(void) {
         if (!sw2) {
             int tunes = sizeof(Faded);
             for (int i = 0; i < tunes; i++){
-                uint32_t freq = Faded[i][0];
-                uint32_t dur = Faded[i][1];
+                int freq = Faded[i][0];
+                int dur = Faded[i][1];
 
                 genPWM(freq, dur, tunePin, TIM6, TIM7); // Play song
             }

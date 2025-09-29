@@ -54,11 +54,3 @@ void configureClock(){
     RCC->CFGR |= (0b11 << 0);
     while(!((RCC->CFGR >> 2) & 0b11));
 }
-
-void timerEnable(RCC_TypeDef* RCC_in, int TIM) {
-    if (TIM == 6) {
-        RCC_in->APB1ENR1 |= (1 << 4);
-    } else if (TIM == 7) {
-        RCC_in->APB1ENR1 |= (1 << 5);
-    } else ;
-}

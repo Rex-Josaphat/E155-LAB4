@@ -7,7 +7,8 @@
 #include "GPIO.h"
 
 void pinMode(int pin, int function) {
-    switch (function) {
+    switch (function)
+    {
     case GPIO_INPUT:
         GPIO->MODER &= ~(0b11 << 2 * pin);
         break;
@@ -30,9 +31,12 @@ int digitalRead(int pin) {
 }
 
 void digitalWrite(int pin, int val) {
-    if (val) {
+    if (val)
+    {
         GPIO->ODR |= (1 << pin); // Turn ON pin
-    } else {
+    }
+    else
+    {
         GPIO->ODR &= ~(1 << pin); // Turn OFF pin
     }
 }
@@ -43,6 +47,6 @@ void togglePin(int pin) {
 }
 
 void swPullUp(int pin) {
-    GPIO->PUPDR &= ~(0x3 << (2 * pin)); // Clear the 2 bits for this pin
-    GPIO->PUPDR |=  (0x1 << (2 * pin)); // Set Pin to 01 (pull-up)
+    GPIO->PURPDR &= ~(0x3 << (2 * pin)); // Clear the 2 bits for this pin
+    GPIO->PURPDR |= (0x1 << (2 * pin));  // Set Pin to 01 (pull-up)
 }

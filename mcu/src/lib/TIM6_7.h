@@ -44,7 +44,6 @@ typedef struct {
 ///////////////////////////////////////////////////////////////////////////////
 void counterON(TIM6_7* TIM);
 void setDelay(TIM6_7* TIM, uint32_t ms);
-void resetFlag(TIM6_7* TIM);
 void resetTIM(TIM6_7* TIM);
 void setPrescaler(TIM6_7* TIM, uint32_t val);
 void setArr(TIM6_7* TIM, uint32_t val);
