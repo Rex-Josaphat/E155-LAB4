@@ -63,7 +63,11 @@ int main(void) {
     RCC->AHB2ENR |= (1 << 0); // Enable GPIOA
     RCC->APB1ENR1 |= (1 << 4); // Enable TIM6
     RCC->APB1ENR1 |= (1 << 5); // Enable TIM7
-
+    
+    // Set Prescalers
+    setPrescaler(TIM6, 1000); // Divide input clock frequency to counter frequency of 1kHz
+    setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
+    
     // Enable internal pull up for onboard switches
     swPullUp(song1Pin);
     swPullUp(song2Pin);
@@ -72,10 +76,6 @@ int main(void) {
     pinMode(tunePin, GPIO_OUTPUT);
     pinMode(song1Pin, GPIO_INPUT);
     pinMode(song2Pin, GPIO_INPUT);
-
-    // Set Prescalers
-    setPrescaler(TIM6, 1000); // Divide input clock frequency to counter frequency of 1kHz
-    setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
 
     // Execute Logic
     while (1) {
