@@ -52,7 +52,7 @@ const int Faded[][2] = {
 int main(void) {
 
     // Define Pins Used
-    int tunePin = 6; // PWM Output Pin
+    int tunePin = 9; // PWM Output Pin
     int song1Pin = 7; // Previous Song
     int song2Pin = 4; // Next Song
     
@@ -65,7 +65,7 @@ int main(void) {
     RCC->APB1ENR1 |= (1 << 5); // Enable TIM7
     
     // Set Prescalers
-    setPrescaler(TIM6, 1000); // Divide input clock frequency to counter frequency of 1kHz
+    setPrescaler(TIM6, 999); // Divide input clock frequency to counter frequency of 1kHz
     setPrescaler(TIM7, 0); // Maintain input frequency of 1MHz for wave gen
     
     // Enable internal pull up for onboard switches
