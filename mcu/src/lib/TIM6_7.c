@@ -61,7 +61,7 @@ void genPWM(uint32_t freq, uint32_t dur, int pin, TIM6_7* TIMdelay, TIM6_7* TIMw
             while(!(TIMwave->SR & 1)) {} // Wait for half-period overflow
             TIMwave->SR &= ~(1 << 0); // Clear UIF on wave timer (prepare for next half)
             
-            if ((TIMdelay->SR) != 0) break;  // Check UIF: If total duration elapsed mid-cycle, exit cleanly
+            if ((TIMdelay->SR) != 0) break;  // Check UIF: Exit if total duration elapsed mid-cycle
 
             digitalWrite(pin, 0); // Drive LOW for one half-period
             while(!(TIMwave->SR & 1)) {} // Wait for half-period overflow
